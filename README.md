@@ -155,6 +155,10 @@ python view_dynamic.py 693542870792011784 --json    # 显示JSON
 - 感谢原作者的初始代码: https://github.com/GowayLee/bili_dynamic_spy
 - 感谢 [SocialSisterYi/bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect) 提供的 B站 API 文档
 
+## 免责声明
+
+请确保您对本项目的使用出于合法用途, 并且不会对任何人的人身安全/心理健康造成不利影响, 如果使用本项目对任何个人或团体造成了损失, 本项目的作者不违此负责.
+
 ## License
 
 MIT
