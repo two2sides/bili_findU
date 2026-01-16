@@ -1,4 +1,4 @@
-# Bili Dynamic Spy
+# Bili FindU
 
 B站动态爬虫 + 评论区UID收集器
 
