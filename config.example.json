@@ -1,10 +1,21 @@
 {
-    "tar_uid": "132677971",
     "crawl_deepth": 10,
+    "crawl_all": false,
+    "min_dynamics": 50,
+    "request_interval": 10,
+    "skip_empty_forward": true,
+    "crawl_all_comments": false,
+    "comment_pages": 100,
+    "comments_per_page": 20,
+    "comment_sorts": [1, 0],
+    "max_fans": 1000,
+    "min_level": 4,
+    "sex_filter": ["女"],
     "cookies": {
-        "buvid3": "7631798E-EFA9-B1C2-19B9-612711A4FE8785440infoc",
-        "b_nut": "1722356585",
-        "_uuid": "9C7BCCF7A-6F2E-DA76-5D109-1410231681069E85799infoc",
-        "buvid4": "A99F9B6B-BD74-5D96-F6D3-8EB77910BD0986489-024073016-dRu%2FudwhD5dOGbeZ263moQ%3D%3D"
+        "buvid3": "你的buvid3",
+        "b_nut": "你的b_nut",
+        "_uuid": "你的_uuid",
+        "buvid4": "你的buvid4",
+        "SESSDATA": "你的SESSDATA"
     }
 }

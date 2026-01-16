@@ -5,6 +5,7 @@ import json
 import csv
 import time
 import requests
+import fake_useragent
 
 dynamic_type_dict = {
     "DYNAMIC_TYPE_NONE"	            :       "无效动态",
@@ -52,6 +53,8 @@ HEADERS = ["时间", "类型", "文本内容", "转发/投稿", "主体类型", 
 UID = config.get("tar_uid")
 DEEPTH = config.get("crawl_deepth")
 
+ua = fake_useragent.UserAgent()
+random_ua = ua.random
 count = 0
 
 def main():
@@ -70,6 +73,8 @@ def main():
     cur_offset = data.get("data").get("offset")
     datapage = parse_data(data)
     save_csv_data(savepath, datapage)
+    with open(f'raw_data_{0}.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
     if has_more is True and DEEPTH > 0:
         for i in range(0, DEEPTH): # 第一次页面偏移时会重叠一条旧动态
@@ -80,6 +85,8 @@ def main():
                 return
             has_more = data.get("data").get("has_more")
             cur_offset = data.get("data").get("offset")
+            with open(f'raw_data_{i + 1}.json', 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
             datapage = parse_data(data)
 
             if i == 1:
@@ -116,7 +123,7 @@ def parse_data(data):
         pub_time = None
         author = module.get("module_author")
         if author is not None:
-            pub_time = datetime_instance.fromtimestamp(module.get("module_author").get("pub_ts"))
+            pub_time = datetime_instance.fromtimestamp(int(module.get("module_author").get("pub_ts")))
         else:
             pub_time = "-"
         data_row.append(pub_time)
@@ -209,6 +216,7 @@ def ask_url(url: str, uid: str, offset: str):
         "b_nut": config_cookie.get("b_nut"),
         "_uuid": config_cookie.get("_uuid"),
         "buvid4": config_cookie.get("buvid4"),
+        # "SESSDATA": config_cookie.get("SESSDATA"),
     }
 
     param = {
@@ -216,11 +224,34 @@ def ask_url(url: str, uid: str, offset: str):
         'host_mid': uid
     }
 
-    response = requests.get(url, params=param, cookies=cookie, headers=header, timeout=8)
+    proxies = {
+    "http": None,
+    "https": None,
+    }
+
+    response = requests.get(url, params=param, cookies=cookie, headers=header, timeout=8, proxies=proxies)
     if response.status_code == 200:
         return response.text
     print("鉴权失败! 请检查Cookie")
     return ''
+
+def get_detail(post_uid: str):
+
+    detail_url = 'https://api.bilibili.com/x/polymer/web-dynamic/v1/detail'
+    params = {
+        'id': post_uid
+    }
+    headers = {
+        "User-Agent": random_ua,
+        "Cookies": "SESS_DATA=d7bd5b6b%2C1784008506%2Ce4461%2A11CjBwEJ52mTSJ61mhkMVibG4uOWNIw2nzEEBAHtpv73jL5GRbyKDapX5bF99GrAshUZkSVmlRNVAxU190aVlGNVdRMG9xZEcyMEU3SXpoWkd5YlhkSDA1VklWbmRYR0s0dlRRU0dVWHYxNnJrN0c2S0JHRExZZU5PZ1lZa051TGpHc0hod2lEZ1NnIIEC"
+    }
+    try:
+        response = requests.get(detail_url, params=params, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+        print(data)
+    except requests.exceptions.RequestException as e:
+        print(f"鉴权失败: {e}")
 
 def save_csv_data(savepath: str, datapage: list):
     """Save data of one page to savepath"""

@@ -1,7 +1,28 @@
+# IDE
 .vscode/
+
+# 测试文件
+test*
 json_exp/
 
-test*
-saved/*.csv
-
+# 个人配置和数据
 config.json
+saved/*.csv
+collected_uids.csv
+collected_uids.txt
+target_video.txt
+raw_data_*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+.env
+
+# 其他
+*.log
+.DS_Store
